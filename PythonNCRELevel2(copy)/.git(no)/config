@@ -1,0 +1,16 @@
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = false
+	logallrefupdates = true
+	symlinks = false
+	ignorecase = true
+[remote "azuredev"]
+	url = https://dgyeotoft@dev.azure.com/dgyeotoft/dgyeotoft/_git/PythonLevel2
+	fetch = +refs/heads/*:refs/remotes/azuredev/*
+[branch "main"]
+	remote = github
+	merge = refs/heads/main
+[remote "github"]
+	url = git@github.com:Fradeet/NCRE2021PythonLevel2.git
+	fetch = +refs/heads/*:refs/remotes/github/*
