@@ -41,7 +41,7 @@ def main():
     p1X, p1Y= map(int,input("输入矩形区域的第一个对角线点Location1 (x,y)：").split(","))
     p2X, p2Y= map(int,input("输入矩形区域的另一个对角线点Location2 (x,y)：").split(","))
 
-    #同级排序,避免负数，规范顺序（地图规范，从小至大？）
+    #同级排序,避免负数，规范顺序（同意从数字小的那一端，左上角开始）
     xList= [p1X,p2X]
     xList.sort()
     yList= [p1Y,p2Y]
@@ -54,6 +54,8 @@ def main():
     areaList= CalcAreaLong() #子程序：计算行列区块多少与像素长度，返回列表
     areaPixelLong= areaList[0]
     areaTilesLong= areaList[1]
+
+    #TODO:图片分割
     
     targetPic = Image.new('RGBA',areaPixelLong) #新建（区块大小）空白图片 New blank picture to store tiles, size is same as all tiles combined.
     locateDict= dict()
@@ -62,12 +64,11 @@ def main():
     picX= picY= 0
     for nowX in range(p1X,p2X+1):
         picY= 0
+        print("Processing({}, {}), Total{}".format(picX,picY,areaTilesLong)) #减少通知次数
         for nowY in range(p1Y,p2Y+1):
             tryCount= 0
-            print("Processing({}, {}), Total{}".format(picX,picY,areaTilesLong))
             while True and tryCount < 10: #有时候读取图片会遭到拒绝，重试多次(在本机大概是18次左右)是因为同步盘的原因会锁存文件
                 try:
-                    
                     tryCount+= 1
                     locateDict= {"z":zoomRate,"x":nowX,"y":nowY} #将单图片详细信息写入字典
                     currentNetworkFile= GetNetworkPictures(locateDict) #子程序：从网络服务器获取图片
@@ -76,10 +77,9 @@ def main():
                     for chunk in currentNetworkFile.iter_content(100000): #分多次写入（防内存溢出?）
                         currentFile.write(chunk)
                     currentFile.close()
-                    '''
-                    #currentPic= Image.new('RGBA',(256,256))
-                    #currentPic.write(currentNetworkFile.content) #打开图片处理（暂缓）
-                    #currentCopyPic= currentPic.copy()#可不可以不用copy()，直接paste()？'''
+                  
+                    #TODO:在变量传入图片而不用写入文件
+
                     currentPic= Image.open(".\\~temp\\~temp.png")
                     currentCopyPic= currentPic.copy()#可不可以不用copy()，直接paste()？
                     currentPic.close()
@@ -87,7 +87,7 @@ def main():
                     targetPic.paste(currentCopyPic,picLocation)
                     picY+= 1
                 except:
-                    print("Error {}, retry.".format(tryCount))
+                    print("Error y= {}, retry {}.".format(picY,tryCount))
                     continue
                 break
         picX+= 1
