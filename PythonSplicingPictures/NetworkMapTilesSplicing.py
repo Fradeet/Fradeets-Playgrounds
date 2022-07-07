@@ -8,7 +8,6 @@ import requests
 
 #初始化全局变量 Initialize global variables
 xList= yList= []
-tilesUrl= "http://localhost:8080/tile/{z}/{x}/{y}.png" #服务器网站，留下{x}等 target tiles server address
 tryCount= 0
 
 def CalcAreaLong():
@@ -25,9 +24,9 @@ def CalcAreaLong():
     return(areaList)
     
 def GetNetworkPictures(infoDict):
-    global tilesUrl
-    finalUrl= tilesUrl.format(**infoDict)
-    tilePic = requests.get(finalUrl)
+    tilesUrl= "http://localhost:8080/tile/{z}/{x}/{y}.png" #服务器网站，留下{x}等 target tiles server address
+    tilesUrl= tilesUrl.format(**infoDict)
+    tilePic = requests.get(tilesUrl)
     return tilePic
 
 
@@ -64,10 +63,12 @@ def main():
     for nowX in range(p1X,p2X+1):
         picY= 0
         for nowY in range(p1Y,p2Y+1):
+            tryCount= 0
             print("Processing({}, {}), Total{}".format(picX,picY,areaTilesLong))
-            while True or tryCount == 5: #有时候读取图片会遭到拒绝，重试多次(在本机大概是18次左右)是因为同步盘的原因会锁存文件
+            while True and tryCount < 10: #有时候读取图片会遭到拒绝，重试多次(在本机大概是18次左右)是因为同步盘的原因会锁存文件
                 try:
                     
+                    tryCount+= 1
                     locateDict= {"z":zoomRate,"x":nowX,"y":nowY} #将单图片详细信息写入字典
                     currentNetworkFile= GetNetworkPictures(locateDict) #子程序：从网络服务器获取图片
                     
@@ -86,8 +87,7 @@ def main():
                     targetPic.paste(currentCopyPic,picLocation)
                     picY+= 1
                 except:
-                    tryCount+= 1
-                    print("Error{}, trying again.".format(tryCount))
+                    print("Error {}, retry.".format(tryCount))
                     continue
                 break
         picX+= 1
