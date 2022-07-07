@@ -30,7 +30,7 @@ def GetNetworkPictures(infoDict):
 
 
 def main():
-    global xList,yList,tilesUrl
+    global xList,yList
     
     #输入放大倍率 Zoom
     zoomRate= input("输入放大级数 (Zoom)：")
