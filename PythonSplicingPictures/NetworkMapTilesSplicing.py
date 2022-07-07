@@ -1,10 +1,8 @@
 # Server:OpenStreetMap-Docker:2.0.0
 
-print("Hallo Earth!")
-from time import sleep
 from PIL import Image
-import os
 import requests
+print("Hallo Earth!")
 
 #初始化全局变量 Initialize global variables
 xList= yList= []
