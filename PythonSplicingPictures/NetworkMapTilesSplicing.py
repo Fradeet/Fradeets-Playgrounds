@@ -45,6 +45,9 @@ def main():
     yList= [p1Y,p2Y]
     yList.sort()
 
+    #TODO:分割页面输出
+    #TODO:黑暗模式
+
     #写回备用
     p1X, p2X= map(int,xList)
     p1Y, p2Y= map(int,yList)
@@ -56,7 +59,7 @@ def main():
     #TODO:图片分割
     
     targetPic = Image.new('RGBA',areaPixelLong) #新建（区块大小）空白图片 New blank picture to store tiles, size is same as all tiles combined.
-    locateDict= dict()
+    
 
     #双for循环/子程序 粘贴图片
     picX= picY= 0
@@ -68,7 +71,7 @@ def main():
             while True and tryCount < 10: #有时候读取图片会遭到拒绝，重试多次(在本机大概是18次左右)是因为同步盘的原因会锁存文件
                 try:
                     tryCount+= 1
-                    locateDict= {"z":zoomRate,"x":nowX,"y":nowY} #将单图片详细信息写入字典
+                    locateDict= dict({"z":zoomRate,"x":nowX,"y":nowY})  #将单图片详细信息写入字典
                     currentNetworkFile= GetNetworkPictures(locateDict) #子程序：从网络服务器获取图片
                     
                     currentFile= open(".\\~temp\\~temp.png","wb") #不知道如何在变量传入图片变量，先写入文件吧#Windows
