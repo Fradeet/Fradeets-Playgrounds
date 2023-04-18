@@ -10,6 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Learn_Android_app">
         <activity android:name=".CP4_Activity.ActivityDataBack"></activity>
+        <activity android:name=".CP3_Controls.BasicElements"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
